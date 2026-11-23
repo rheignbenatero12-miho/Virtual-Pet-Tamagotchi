@@ -1,0 +1,1481 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mochi Pet | Virtual Companion</title>
+
+<style>
+/* GENERAL DESIGN NYA TO AH*/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #fceaf0;
+    font-family: 'Nunito', Arial, sans-serif;
+    padding: 25px;
+    margin: 0;
+    color: #a77c92;
+}
+
+button {
+    font-family: inherit;
+}
+
+.desktop {
+    max-width: 1100px;
+    margin: auto;
+    background: #fff7fa;
+    border: 2px solid #f3c7d6;
+    border-radius: 20px;
+    padding: 18px;
+}
+
+/* HEADER */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    font-size: 47px;
+}
+
+.brand h1 {
+    color: #ec79a5;
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 10px;
+    color: #b58ca1;
+    letter-spacing: 2px;
+}
+
+.level {
+    background: white;
+    border: 2px solid #f0c7d8;
+    border-radius: 13px;
+    padding: 10px 18px;
+    font-size: 13px;
+    box-shadow: 0 3px #f0d5df;
+}
+
+.level strong {
+    color: #e979a4;
+}
+
+.level p {
+    margin-bottom: 0;
+}
+
+.nav {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.nav button {
+    background: white;
+    border: 1px solid #edcada;
+    border-radius: 12px;
+    padding: 9px 12px;
+    color: #a77c92;
+    font-size: 11px;
+    cursor: pointer;
+    box-shadow: 0 3px #f0d5df;
+    transition: 0.2s;
+}
+
+.nav button:hover {
+    background: #ffe0ec;
+    transform: translateY(-2px);
+}
+
+/* MAIN LAYOUT NUA*/
+.main-layout {
+    display: grid;
+    grid-template-columns: 235px 1fr;
+    gap: 15px;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.panel {
+    background: white;
+    border: 2px solid #f2cbd9;
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 3px #f4dce5;
+}
+
+.panel h3 {
+    color: #e77fa4;
+    font-size: 13px;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+/* STATUS BARS STATS*/
+.stat {
+    margin-bottom: 13px;
+}
+
+.stat-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.bar {
+    height: 10px;
+    background: #f7e8ee;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.fill {
+    display: block;
+    height: 100%;
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+.happiness {
+    background: #f47eac;
+}
+
+.hunger {
+    background: #ffb15e;
+}
+
+.energy {
+    background: #83b9ee;
+}
+
+.clean {
+    background: #8dd7bd;
+}
+
+/* SIDEBAR BUTTONS */
+.side-button {
+    width: 100%;
+    padding: 9px;
+    margin-top: 7px;
+    border: 1px solid #edc4d4;
+    background: #fff8fb;
+    color: #a47791;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.side-button:hover {
+    background: #ffe0ec;
+    transform: translateY(-2px);
+}
+
+/* INFORMATION CARDS */
+.info-card {
+    font-size: 11px;
+    line-height: 1.7;
+    color: #a8899b;
+}
+
+.info-card .emoji {
+    font-size: 23px;
+    display: block;
+    margin-bottom: 7px;
+}
+
+.info-card strong {
+    color: #e77fa4;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.about-pet {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+/* PET ROOM */
+.room {
+    height: 420px;
+    position: relative;
+    overflow: hidden;
+    background-image: url("https://i.pinimg.com/736x/b3/76/85/b37685c6e2042121e11cde69f768a3ef.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 3px solid #d9b7b8;
+    border-radius: 18px;
+}
+
+/* PET CONTAINER */
+.pet-container {
+    position: absolute;
+    bottom: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 3;
+    animation: wander 12s ease-in-out infinite;
+}
+
+/* ACTUAL PIXEL-ART PET */
+.pet {
+    width: 230px;
+    height: 230px;
+    object-fit: contain;
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 5px 3px #a97c8840);
+    transition: filter 0.3s;
+}
+
+.pet:hover {
+    filter: drop-shadow(0 8px 8px #ec79a580);
+}
+
+/* WANDERING */
+@keyframes wander {
+    0%, 100% {
+        transform: translateX(-50%);
+    }
+
+    25% {
+        transform: translateX(calc(-50% - 65px));
+    }
+
+    50% {
+        transform: translateX(calc(-50% + 65px));
+    }
+
+    75% {
+        transform: translateX(calc(-50% - 25px));
+    }
+}
+
+/* ACTION EFFECTS NG PET*/
+.pet-container.jumping {
+    animation: petJump 0.65s ease-in-out 3;
+}
+
+@keyframes petJump {
+    0%, 100% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, -35px);
+    }
+}
+
+.pet-container.playing {
+    animation: petPlay 0.5s ease-in-out 4;
+}
+
+@keyframes petPlay {
+    0%, 100% {
+        transform: translate(-50%, 0) rotate(0);
+    }
+
+    25% {
+        transform: translate(calc(-50% - 18px), -15px) rotate(-5deg);
+    }
+
+    75% {
+        transform: translate(calc(-50% + 18px), -15px) rotate(5deg);
+    }
+}
+
+.pet-container.sleeping {
+    animation: none;
+    transform: translateX(-50%);
+}
+
+/* MESSAGE */
+.pet-message {
+    position: absolute;
+    bottom: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 2px solid #dfb5c6;
+    border-radius: 15px;
+    padding: 10px 15px;
+    font-size: 12px;
+    color: #a77b91;
+    z-index: 4;
+    width: max-content;
+    max-width: 90%;
+    text-align: center;
+}
+
+/* SLEEP EFFECTS */
+.sleep-effects {
+    display: none;
+    position: absolute;
+    top: -15px;
+    right: -25px;
+    font-size: 22px;
+    animation: floatZ 2s ease-in-out infinite;
+}
+
+.sleep-effects.active {
+    display: block;
+}
+
+@keyframes floatZ {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translateY(-15px);
+        opacity: 1;
+    }
+}
+
+/* ACTION BUTTONS */
+.actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 13px 0;
+}
+
+.action {
+    background: white;
+    border: 2px solid #efc6d7;
+    border-radius: 13px;
+    padding: 13px 5px;
+    color: #a47a91;
+    font-weight: 800;
+    font-size: 12px;
+    box-shadow: 0 4px #f2dce5;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.action span {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+.action:hover {
+    background: #ffe4ee;
+    transform: translateY(-3px);
+}
+
+.action:active {
+    transform: scale(0.96);
+}
+
+/* DIARY UPDATE*/
+.chat-box {
+    background: white;
+    border: 2px solid #efcbd9;
+    border-radius: 15px;
+    padding: 13px;
+    min-height: 145px;
+}
+
+.chat-box h3 {
+    color: #e77fa4;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.chat-text {
+    background: #fffafc;
+    border: 1px solid #f0d8e2;
+    border-radius: 10px;
+    padding: 13px;
+    min-height: 65px;
+    max-height: 160px;
+    overflow-y: auto;
+    font-size: 11px;
+    color: #b39aaa;
+    line-height: 1.8;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px 5px 5px;
+    color: #d48ba9;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* RESPONS*/
+@media (max-width: 700px) {
+    body {
+        padding: 10px;
+    }
+
+    .main-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        justify-content: center;
+    }
+
+    .brand {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .room {
+        height: 350px;
+    }
+
+    .pet {
+        width: 190px;
+        height: 190px;
+    }
+
+    .pet-message {
+        bottom: 260px;
+    }
+
+    .actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pet-container {
+        bottom: 45px;
+    }
+}
+
+/* REDUCE MOTION */
+@media (prefers-reduced-motion: reduce) {
+    .pet-container {
+        animation: none !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="desktop">
+
+    <!-- HEADER -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">🐾</div>
+
+            <div>
+                <h1>MOCHI PET</h1>
+                <p class="subtitle">YOUR LITTLE VIRTUAL FRIEND</p>
+            </div>
+        </div>
+
+        <div class="level">
+            <strong id="levelText">Lv. 1</strong>
+            <br>
+            <p id="welcomeText">♡ Mochi - Baby</p>
+        </div>
+
+        <nav class="nav">
+            <button id="saveButton">💾 Save</button>
+            <button id="resetButton">🔄 Reset</button>
+            <button id="aboutButton">🐾 About</button>
+            <button id="helpButton">❔ Help</button>
+        </nav>
+
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <section class="panel">
+
+                <h3>♡ PET STATUS</h3>
+
+                <div class="stat">
+                    <div class="stat-info">
+                        <span>💗 Happiness</span>
+                        <span id="happinessValue">90 / 100</span>
+                    </div>
+
+                    <div class="bar">
+                        <div class="fill happiness" id="happinessBar"></div>
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-info">
+                        <span>🦴 Hunger</span>
+                        <span id="hungerValue">70 / 100</span>
+                    </div>
+
+                    <div class="bar">
+                        <div class="fill hunger" id="hungerBar"></div>
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-info">
+                        <span>⚡ Energy</span>
+                        <span id="energyValue">85 / 100</span>
+                    </div>
+
+                    <div class="bar">
+                        <div class="fill energy" id="energyBar"></div>
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-info">
+                        <span>✨ Cleanliness</span>
+                        <span id="cleanValue">95 / 100</span>
+                    </div>
+
+                    <div class="bar">
+                        <div class="fill clean" id="cleanBar"></div>
+                    </div>
+                </div>
+
+                <button class="side-button" id="bathButton">
+                    🛁 Give a Bath
+                </button>
+
+                <button class="side-button" id="medicineButton">
+                    💊 Medicine
+                </button>
+
+            </section>
+
+            <!-- ABOUT MOCHI -->
+            <section class="panel info-card">
+
+                <span class="emoji">
+                    <img
+                        src="mochi.jpg"
+                        class="about-pet"
+                        alt="Mochi"
+                    >
+                </span>
+
+                <strong>ABOUT MOCHI</strong>
+
+                Meet Mochi! Your little virtual friend who needs love,
+                care, and attention every day.
+
+            </section>
+
+            <!-- REMINDER -->
+            <section class="panel info-card">
+
+                <span class="emoji">🎀</span>
+
+                <strong>DAILY REMINDER</strong>
+
+                Don't forget to feed Mochi, play with it, and let it rest!
+
+            </section>
+
+        </aside>
+
+        <!-- MAIN GAME AREA -->
+        <section class="content">
+
+            <div class="room">
+
+                <div class="pet-message" id="petMessage">
+                    Hiii! ♡ I'm happy you're here!
+                </div>
+
+                <div class="pet-container" id="petContainer">
+
+                    <!-- ANIMATIONS NG PET -->
+                    <img
+                        src="mochi-pet-assets/mochi-idle.gif"
+                        class="pet"
+                        id="pet"
+                        alt="Mochi the pixel-art dog"
+                    >
+
+                    <div class="sleep-effects" id="sleepEffects">
+                        💤 Zzz...
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PET ACTIONS -->
+            <div class="actions">
+
+                <button class="action" id="feedButton">
+                    <span>🦴</span>
+                    Feed
+                </button>
+
+                <button class="action" id="playButton">
+                    <span>😆</span>
+                    Play
+                </button>
+
+                <button class="action" id="petButton">
+                    <span>🥰</span>
+                    Pet
+                </button>
+
+                <button class="action" id="sleepButton">
+                    <span>😴</span>
+                    Sleep
+                </button>
+
+            </div>
+
+            <!-- PET DIARY -->
+            <section class="chat-box">
+
+                <h3>📖 PET DIARY</h3>
+
+                <div class="chat-text" id="petDiary">
+                    ✨ Today is a wonderful day!
+                    <br>
+                    🐾 Mochi is enjoying its new home.
+                    <br>
+                    💗 Thank you for taking care of me!
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <footer>
+        ♡ Made with love for Mochi ♡
+        <br>
+        TAKE CARE OF YOUR LITTLE FRIEND!
+    </footer>
+
+</div>
+
+<script>
+
+/*1. PET INFO*/
+
+let mochi = {
+    happiness: 90,
+    hunger: 70,
+    energy: 85,
+    clean: 95,
+    experience: 0
+};
+
+let sleeping = false;
+let actionTimer = null;
+let currentExpression = "idle";
+
+
+/*2.HTML ELEMENTS*/
+
+const pet = document.getElementById("pet");
+
+const petContainer = document.getElementById("petContainer");
+
+const petMessage = document.getElementById("petMessage");
+
+const petDiary = document.getElementById("petDiary");
+
+const sleepEffects = document.getElementById("sleepEffects");
+
+
+/*3. PET IMAGES*/
+
+const petImages = {
+
+    idle: "https://scontent.fmnl17-8.fna.fbcdn.net/v/t1.15752-9/914978606_1150776870679941_3612540476750026745_n.png?_nc_cat=105&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=s03LuqjsbIUQ7kNvwEyh02k&_nc_oc=AdruJQX5SaoYn4SwKqDm_6GiXEGRo3WKexbgKAiMa8ExYFn5Na8l1ZFn_Zcf9JtVxVM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-8.fna&_nc_ss=7a22e&oh=03_Q7cD6wE8bAX1qcAkJOfPCRWWFqqvgOM_-FGGGYts5n_Xm_9EaQ&oe=6B262B48",
+
+    happy: "https://scontent.fmnl17-8.fna.fbcdn.net/v/t1.15752-9/914978606_1150776870679941_3612540476750026745_n.png?_nc_cat=105&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=s03LuqjsbIUQ7kNvwEyh02k&_nc_oc=AdruJQX5SaoYn4SwKqDm_6GiXEGRo3WKexbgKAiMa8ExYFn5Na8l1ZFn_Zcf9JtVxVM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-8.fna&_nc_ss=7a22e&oh=03_Q7cD6wE8bAX1qcAkJOfPCRWWFqqvgOM_-FGGGYts5n_Xm_9EaQ&oe=6B262B48",
+
+    playing: "https://scontent.fmnl17-2.fna.fbcdn.net/v/t1.15752-9/910738119_1777072180073194_6260039607313297590_n.png?_nc_cat=108&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=3MU1t03XfboQ7kNvwFwZn1M&_nc_oc=Adq6HlVr_xrGnaF9Jjv_DyEIPE1xcaD7O_EJgI1pdUkTjDS_-pj3GPNnGmxL5efGeSg&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-2.fna&_nc_ss=7a22e&oh=03_Q7cD6wH8r17VbmyLIEbK9RKzBoZUTavDHr9k7UEdsii4MFa1NQ&oe=6B262F01",
+
+    sleeping: "https://scontent.fmnl17-6.fna.fbcdn.net/v/t1.15752-9/914165414_1871538657381737_6289851944192527600_n.png?_nc_cat=110&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=DO-WOU2HTjMQ7kNvwG03DpW&_nc_oc=AdrmtNWz-sAbracB-sl2noiTxgIhS-Xx_URP19xFXXt_1AX9vuwznQf14OlxDM6OGAM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-6.fna&_nc_ss=7a22e&oh=03_Q7cD6wHVEAhXy_SuHAvfgVL12dgU9-bmMna8y_d8RiBz_HeCbQ&oe=6B2622BE",
+
+    sad: "https://scontent.fmnl17-6.fna.fbcdn.net/v/t1.15752-9/914674354_985735840862318_550887332788558306_n.png?_nc_cat=109&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=Oz-YFSO7ZbgQ7kNvwHTdZOa&_nc_oc=Adp-uhFexsOu07kr4jJRCFHcQbL9gq07rJFHj1tBSznahGdC4koO6YHg-BHxNydr9co&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-6.fna&_nc_ss=7a22e&oh=03_Q7cD6wFTIxD0iHYRgwnCBADkMi6PZ1jUgY6W0TpeZoFwE2aJFQ&oe=6B260A40",
+
+    dirty: "https://scontent.fmnl17-6.fna.fbcdn.net/v/t1.15752-9/913406618_1452951949710893_1459142144632194527_n.png?_nc_cat=108&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=-TIoxqsY9_EQ7kNvwGmX1wI&_nc_oc=Adq1raa42gwSFnXZR0HS0Q8QmIggnMHDT8eC9xFFvVfe7rfF1CrKqUV_TDbN5y2Xjiw&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-6.fna&_nc_ss=7a22e&oh=03_Q7cD6wEoGDNPb1odyRA2ELLMNPod0hj6ajyD1N0r9SxN0TOt9g&oe=6B262122",
+
+    hungry: "https://scontent.fmnl17-4.fna.fbcdn.net/v/t1.15752-9/911849331_962467893363263_1920588744933012509_n.png?_nc_cat=107&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=vbrB3VtesP4Q7kNvwEfGJW9&_nc_oc=Ado12-TJ7Avth8sjg2W7OF--JeXqxx4N83tt_IRlJR6jGLoRh-1bz1h3ARGpJpHksqo&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-4.fna&_nc_ss=7a22e&oh=03_Q7cD6wGEyXtVJ-gY5C4pMmTMLYyksZO3T87Anqx1GhmszbDGgA&oe=6B260E4F",
+
+    excited: "https://scontent.fmnl17-2.fna.fbcdn.net/v/t1.15752-9/910738119_1777072180073194_6260039607313297590_n.png?_nc_cat=108&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=3MU1t03XfboQ7kNvwFwZn1M&_nc_oc=Adq6HlVr_xrGnaF9Jjv_DyEIPE1xcaD7O_EJgI1pdUkTjDS_-pj3GPNnGmxL5efGeSg&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-2.fna&_nc_ss=7a22e&oh=03_Q7cD6wH8r17VbmyLIEbK9RKzBoZUTavDHr9k7UEdsii4MFa1NQ&oe=6B262F01",
+
+    love: "https://scontent.fmnl17-6.fna.fbcdn.net/v/t1.15752-9/920267358_2319499882185304_8442447047641066081_n.png?_nc_cat=103&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=NS0YdeWILHoQ7kNvwEpLQ9x&_nc_oc=AdoYZMwAgOilzRK9syOxemAMMWyqpoHsT1x6iMUBexfPSU2fGW8BZTOQqNgsOrVYrcI&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-6.fna&_nc_ss=7a22e&oh=03_Q7cD6wE3xHeK-tXar89JOpTVZJuI_npWTADNooHxEJzEpnme7Q&oe=6B262AE0",
+
+    clean: "https://scontent.fmnl17-7.fna.fbcdn.net/v/t1.15752-9/908770132_1314788460811002_7234197629005627728_n.png?_nc_cat=111&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=Wrt6xsZ4kuAQ7kNvwGTqLXZ&_nc_oc=AdrR06DELUZCt9loKqYXV3MB-eh3v0nOuliLsQW4Zh397Y67MAOYoY5EpHuGkw4DHrU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-7.fna&_nc_ss=7a22e&oh=03_Q7cD6wHh6AKyXj8YlIzRZn-PYpjDsPUXcX3s3bId02FTAi0yvA&oe=6B262D9B",
+
+    levelUp: "https://scontent.fmnl17-5.fna.fbcdn.net/v/t1.15752-9/917382598_1484727690185022_3657527170852511486_n.png?_nc_cat=103&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=fc17b8&_nc_ohc=2Gm9v_mdTp0Q7kNvwFVLeBg&_nc_oc=AdroXfEGr789ObxCQy7a5QycY9x9mxqqJPZt6JPPP3hE1wYbbWtzncCSsWs36igAqf8&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fmnl17-5.fna&_nc_ss=7a22e&oh=03_Q7cD6wFUarN7V-rK_lQ5jA4Zex1Wx-ds0mPRyxaO5ZyP1RuZeg&oe=6B2618BF"
+
+};
+
+
+/*4. CHANGE PET IMAGE*/
+
+function changePetImage(expression) {
+
+    const imagePath = petImages[expression] || petImages.idle;
+
+    const testImage = new Image();
+
+    testImage.onload = function() {
+
+        pet.src = imagePath;
+
+        currentExpression = expression;
+
+    };
+
+    testImage.onerror = function() {
+
+        console.error("Could not load Mochi image:", imagePath);
+
+    };
+
+    testImage.src = imagePath;
+
+}
+
+
+/*5. PET EXPRESSION TEST LNG*/
+
+function showTemporaryExpression(expression, duration = 2500) {
+
+    clearTimeout(actionTimer);
+
+    changePetImage(expression);
+
+    actionTimer = setTimeout(function() {
+
+        if (!sleeping) {
+
+            checkPetCondition();
+
+        }
+
+    }, duration);
+
+}
+
+
+/*6. SAVE GAME*/
+
+function saveMochi() {
+
+    try {
+
+        localStorage.setItem("mochiData", JSON.stringify(mochi));
+
+    } catch (error) {
+
+        console.warn("Unable to save game.", error);
+
+    }
+
+}
+
+
+/*7. LOAD GAME*/
+
+function loadMochi() {
+
+    try {
+
+        const savedData = localStorage.getItem("mochiData");
+
+        if (savedData) {
+
+            const data = JSON.parse(savedData);
+
+            ["happiness", "hunger", "energy", "clean", "experience"]
+                .forEach(key => {
+
+                    if (
+                        typeof data[key] === "number" &&
+                        Number.isFinite(data[key])
+                    ) {
+
+                        const max = key === "experience" ? 1000000 : 100;
+
+                        mochi[key] = Math.max(
+                            0,
+                            Math.min(max, data[key])
+                        );
+
+                    }
+
+                });
+
+        }
+
+    } catch (error) {
+
+        console.warn("Unable to load saved pet data.", error);
+
+    }
+
+}
+
+
+/*8. UPDATE STATUS BARS*/
+
+function updateStatus() {
+
+    const stats = [
+
+        ["happiness", "happinessValue", "happinessBar"],
+
+        ["hunger", "hungerValue", "hungerBar"],
+
+        ["energy", "energyValue", "energyBar"],
+
+        ["clean", "cleanValue", "cleanBar"]
+
+    ];
+
+    stats.forEach(([key, valueId, barId]) => {
+
+        document.getElementById(valueId).textContent =
+            mochi[key] + " / 100";
+
+        document.getElementById(barId).style.width =
+            mochi[key] + "%";
+
+    });
+
+    updateLevel();
+
+    saveMochi();
+
+}
+
+
+/*9. CHANGE STATUS*/
+
+function changeStatus(stat, amount) {
+
+    mochi[stat] = Math.max(
+        0,
+        Math.min(100, mochi[stat] + amount)
+    );
+
+    updateStatus();
+
+}
+
+
+/*10. DISPLAY MESSAGE*/
+
+function showMessage(message) {
+
+    petMessage.textContent = message;
+
+}
+
+
+/*11. PET ANIMATIONS*/
+
+function animatePet(animationName) {
+
+    petContainer.classList.remove(
+        "jumping",
+        "playing",
+        "sleeping"
+    );
+
+    void petContainer.offsetWidth;
+
+    if (animationName) {
+
+        petContainer.classList.add(animationName);
+
+    }
+
+}
+
+
+/* 12. PET DIARY UPD*/
+
+function addDiary(message) {
+
+    const entry = document.createElement("div");
+
+    const time = new Date().toLocaleTimeString([], {
+
+        hour: "2-digit",
+
+        minute: "2-digit"
+
+    });
+
+    entry.textContent = "🐾 " + time + " - " + message;
+
+    petDiary.prepend(entry);
+
+    while (petDiary.children.length > 10) {
+
+        petDiary.lastElementChild.remove();
+
+    }
+
+}
+
+
+/*13. EXPERIENCE AND LEVEL*/
+
+function gainExperience(amount) {
+
+    const oldLevel = Math.floor(mochi.experience / 100) + 1;
+
+    mochi.experience += amount;
+
+    const newLevel = Math.floor(mochi.experience / 100) + 1;
+
+    updateLevel();
+
+    saveMochi();
+
+    if (newLevel > oldLevel) {
+
+        showMessage("Yay! Mochi leveled up! 🎉");
+
+        showTemporaryExpression("levelUp", 3000);
+
+        animatePet("jumping");
+
+        addDiary("Mochi reached Level " + newLevel + "!");
+
+    }
+
+}
+
+
+function updateLevel() {
+
+    const level = Math.floor(mochi.experience / 100) + 1;
+
+    let stage = "Baby";
+
+    if (level >= 10) {
+
+        stage = "Adult";
+
+    } else if (level >= 5) {
+
+        stage = "Teen";
+
+    }
+
+    document.getElementById("levelText").textContent =
+        "Lv. " + level;
+
+    document.getElementById("welcomeText").textContent =
+        "♡ Mochi - " + stage;
+
+}
+
+
+/*14. FEED MOCHI PET*/
+
+document.getElementById("feedButton").addEventListener("click", function() {
+
+    if (sleeping) {
+
+        showMessage("Shhh! I'm sleeping right now! 😴");
+
+        return;
+
+    }
+
+    if (mochi.hunger >= 100) {
+
+        showMessage("I'm already full! ♡");
+
+        return;
+
+    }
+
+    changeStatus("hunger", 15);
+
+    changeStatus("energy", 3);
+
+    changeStatus("happiness", 5);
+
+    changeStatus("clean", -3);
+
+    showTemporaryExpression("happy");
+
+    animatePet("jumping");
+
+    gainExperience(10);
+
+    showMessage("Yummy! Thank you for feeding me! 🍓");
+
+    addDiary("You fed Mochi. Mochi enjoyed the food!");
+
+});
+
+
+/*15. PLAY WITH PET*/
+
+document.getElementById("playButton").addEventListener("click", function() {
+
+    if (sleeping) {
+
+        showMessage("I'm sleeping! Let's play later! 😴");
+
+        return;
+
+    }
+
+    if (mochi.energy < 10) {
+
+        showMessage("I'm too tired to play. Let me rest! 💤");
+
+        changePetImage("sleepy");
+
+        return;
+
+    }
+
+    changeStatus("happiness", 10);
+
+    changeStatus("energy", -10);
+
+    changeStatus("hunger", -5);
+
+    changeStatus("clean", -5);
+
+    clearTimeout(actionTimer);
+
+    changePetImage("playing");
+
+    animatePet("playing");
+
+    actionTimer = setTimeout(function() {
+
+        if (!sleeping) {
+
+            checkPetCondition();
+
+        }
+
+        animatePet("");
+
+    }, 4000);
+
+    gainExperience(15);
+
+    showMessage("Yay! I love playing with you! 🌹");
+
+    addDiary("You played with Mochi. Mochi is having fun!");
+
+});
+
+
+/* 16. PET SI DOGGY*/
+
+document.getElementById("petButton").addEventListener("click", function() {
+
+    if (sleeping) {
+
+        showMessage("Awww... I'm sleeping! 😴");
+
+        return;
+
+    }
+
+    changeStatus("happiness", 10);
+
+    changeStatus("clean", -1);
+
+    showTemporaryExpression("love");
+
+    animatePet("jumping");
+
+    gainExperience(5);
+
+    showMessage("Awww! I love your attention! 💗");
+
+    addDiary("You gave Mochi some love and affection!");
+
+});
+
+
+/*17. SLEEP AND WAKE UP*/
+
+document.getElementById("sleepButton").addEventListener("click", function() {
+
+    clearTimeout(actionTimer);
+
+    if (sleeping) {
+
+        sleeping = false;
+
+        changePetImage("idle");
+
+        animatePet("");
+
+        sleepEffects.classList.remove("active");
+
+        showMessage("I'm awake! Let's play! 💗");
+
+        addDiary("Mochi woke up from a nap!");
+
+        return;
+
+    }
+
+    sleeping = true;
+
+    changePetImage("sleeping");
+
+    animatePet("sleeping");
+
+    sleepEffects.classList.add("active");
+
+    showMessage("Zzz... Sweet dreams! 💤");
+
+    addDiary("Mochi went to sleep!");
+
+});
+
+
+/* 18. GIVE BATH*/
+
+document.getElementById("bathButton").addEventListener("click", function() {
+
+    if (sleeping) {
+
+        showMessage("Please don't wake me up! 😴");
+
+        return;
+
+    }
+
+    if (mochi.clean >= 100) {
+
+        showMessage("I'm already clean! ✨");
+
+        return;
+
+    }
+
+    changeStatus("clean", 25);
+
+    changeStatus("happiness", 5);
+
+    changeStatus("hunger", -2);
+
+    showTemporaryExpression("clean");
+
+    animatePet("jumping");
+
+    gainExperience(5);
+
+    showMessage("I feel so fresh and clean! ✨");
+
+    addDiary("You gave Mochi a refreshing bath!");
+
+});
+
+
+/*19. GIVE MEDICINE*/
+
+document.getElementById("medicineButton").addEventListener("click", function() {
+
+    if (sleeping) {
+
+        showMessage("I'm sleeping. Let me rest! 😴");
+
+        return;
+
+    }
+
+    if (mochi.energy >= 100 && mochi.happiness >= 100) {
+
+        showMessage("I'm already feeling great! 💗");
+
+        return;
+
+    }
+
+    changeStatus("happiness", 10);
+
+    changeStatus("energy", 100);
+
+    changeStatus("hunger", -3);
+
+    showTemporaryExpression("happy");
+
+    animatePet("jumping");
+
+    gainExperience(5);
+
+    showMessage("Thank you! I'm feeling better! 💊");
+
+    addDiary("You gave Mochi some medicine!");
+
+});
+
+
+/*20. AUTOMATIC PET NEEDS*/
+
+function naturalNeeds() {
+
+    if (sleeping) {
+
+        changeStatus("energy", 10);
+
+        changeStatus("happiness", -1);
+
+        changeStatus("hunger", -3);
+
+        changeStatus("clean", -2);
+
+        showMessage("Zzz... I'm getting my energy back! 💤");
+
+    } else {
+
+        changeStatus("happiness", -1);
+
+        changeStatus("hunger", -2);
+
+        changeStatus("energy", -1);
+
+        changeStatus("clean", -1);
+
+        checkPetCondition();
+
+    }
+
+}
+
+
+/*21. CHECK PET CONDITION*/
+
+function checkPetCondition() {
+
+    if (sleeping) return;
+
+    if (mochi.hunger <= 20) {
+
+        changePetImage("hungry");
+
+        showMessage("I'm getting hungry! Can I have food? 🍓");
+
+    } else if (mochi.energy <= 20) {
+
+        changePetImage("sleepy");
+
+        showMessage("I'm sleepy. I need some rest! 💤");
+
+    } else if (mochi.happiness <= 20) {
+
+        changePetImage("lonely");
+
+        showMessage("I'm feeling lonely. Play with me! 💗");
+
+    } else if (mochi.clean <= 20) {
+
+        changePetImage("dirty");
+
+        showMessage("I need a bath! 🛁");
+
+    } else {
+
+        changePetImage("idle");
+
+        showMessage("Hiii! ♡ I'm happy you're here!");
+
+    }
+
+}
+
+
+/*22. SAVE BUTTON PROGRSS*/
+
+document.getElementById("saveButton").addEventListener("click", function() {
+
+    saveMochi();
+
+    showMessage("Your progress has been saved! 💾");
+
+    addDiary("Your game progress was saved!");
+
+});
+
+
+/*23. RESET BUTTON*/
+
+document.getElementById("resetButton").addEventListener("click", function() {
+
+    const confirmReset = confirm(
+        "Are you sure you want to reset Mochi's progress?"
+    );
+
+    if (confirmReset) {
+
+        clearTimeout(actionTimer);
+
+        mochi = {
+
+            happiness: 90,
+
+            hunger: 70,
+
+            energy: 85,
+
+            clean: 95,
+
+            experience: 0
+
+        };
+
+        sleeping = false;
+
+        localStorage.removeItem("mochiData");
+
+        changePetImage("idle");
+
+        animatePet("");
+
+        sleepEffects.classList.remove("active");
+
+        petDiary.innerHTML =
+            "✨ Today is a wonderful day!";
+
+        updateStatus();
+
+        showMessage("Yay! We can start a new adventure! 💗");
+
+        addDiary("Mochi's progress has been reset!");
+
+    }
+
+});
+
+
+/*24. ABOUT BUTTON*/
+
+document.getElementById("aboutButton").addEventListener("click", function() {
+
+    alert(
+        "MOCHI PET 🐶\n\n" +
+        "Mochi is your little virtual companion!\n\n" +
+        "Feed, play, pet, and take care of Mochi every day.\n" +
+        "Keep its happiness, hunger, energy, and cleanliness balanced!"
+    );
+
+});
+
+
+/*25. HELP BUTTON*/
+
+document.getElementById("helpButton").addEventListener("click", function() {
+
+    alert(
+        "HOW TO PLAY MOCHI PET 💗\n\n" +
+        "🦴 FEED - Increase hunger satisfaction.\n" +
+        "😆 PLAY - Increase happiness.\n" +
+        "🥰 PET - Give Mochi affection.\n" +
+        "😴 SLEEP - Restore energy over time.\n" +
+        "🛁 BATH - Improve cleanliness.\n" +
+        "💊 MEDICINE - Help Mochi recover.\n\n" +
+        "Take good care of your virtual pet!"
+    );
+
+});
+
+
+/*26. CLICK PET INTERACT*/
+
+pet.addEventListener("click", function() {
+
+    if (sleeping) {
+
+        showMessage("Zzz... I'm dreaming! 😴");
+
+        return;
+
+    }
+
+    changeStatus("happiness", 2);
+
+    showTemporaryExpression("love");
+
+    animatePet("jumping");
+
+    showMessage("Hehe! That tickles! 💗");
+
+});
+
+
+/*27. INITIALIZE GAME*/
+
+loadMochi();
+
+updateStatus();
+
+checkPetCondition();
+
+
+/*28. AUTOMATIC NEEDS TIMER*/
+
+setInterval(naturalNeeds, 10000);
+
+
+/*29. SAVE WHEN LEAVING*/
+
+window.addEventListener("beforeunload", function() {
+
+    saveMochi();
+
+});
+
+</script>
+
+</body>
+</html>
